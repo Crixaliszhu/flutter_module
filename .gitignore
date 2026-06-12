@@ -1,0 +1,42 @@
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+pubspec.lock
+
+# Android related
+.android/
+*.iml
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# iOS related
+.ios/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Miscellaneous
+*.jks
+*.p8
+*.p12
+*.key
+*.crt
+*.der
+*.pem
