@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'app/entry_args.dart';
-import 'channel/event_channel.dart';
+import 'pigeon/event_bridge.dart';
 import 'routing/route_stack_observer.dart';
 import 'routing/router.dart';
 
@@ -16,6 +16,7 @@ class AppConfig {
 ///
 /// 每个 Flutter 引擎只有一个 Navigator，挂一个 observer 就够了。
 final RouteStackObserver routeStackObserver = RouteStackObserver();
+final DemoEventBridge demoEventBridge = DemoEventBridge();
 
 /// Flutter Module 的 Dart 入口。
 ///
@@ -27,9 +28,9 @@ void main(List<String> args) {
   WidgetsFlutterBinding.ensureInitialized();
   AppConfig.entryArgs = EntryArgs.parse(args);
 
-  // 注册原生→Flutter 的事件通道（FlutterApi 等价物）。
+  // 注册原生→Flutter 的 Pigeon FlutterApi。
   // 必须在 runApp 之前完成注册，避免错过原生预热阶段推过来的事件。
-  EventChannelBridge.instance.startListening();
+  demoEventBridge.setUp();
 
   runApp(const DemoApp());
 }

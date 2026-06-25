@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../channel/route_channel.dart';
+import '../pigeon/demo_bridge.dart';
 
 /// Navigator 路由栈观察器。
 ///
@@ -52,7 +52,7 @@ class RouteStackObserver extends NavigatorObserver {
     // 栈里只剩 1 个路由 = 预热时的根路由 `flutter/root`（空白 Scaffold）。
     // 说明业务页面都退完了，通知原生关 Activity。
     if (_routeCount <= 1 && _instanceId != null) {
-      RouteChannel.removeFlutterContainer(_instanceId!);
+      DemoBridgeApis.route.removeFlutterContainer(_instanceId!);
     }
   }
 }

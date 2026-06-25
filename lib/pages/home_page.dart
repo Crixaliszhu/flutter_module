@@ -2,11 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../channel/device_info_channel.dart';
-import '../channel/event_channel.dart';
-import '../channel/route_channel.dart';
-import '../channel/toast_channel.dart';
 import '../main.dart';
+import '../pigeon/demo_bridge.dart';
+import '../pigeon/generated/demo_bridge.g.dart';
 
 /// Flutter 首页。
 ///
@@ -31,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _sub = EventChannelBridge.instance.events.where((e) => e.name == 'tick').listen((_) {
+    _sub = demoEventBridge.events.where((e) => e.name == 'tick').listen((_) {
       setState(() => _tickCount++);
     });
   }
@@ -58,14 +56,14 @@ class _HomePageState extends State<HomePage> {
                 widget.arguments.entries.map((e) => '${e.key} = ${e.value}').join('\n')),
             const SizedBox(height: 24),
             FilledButton(
-              onPressed: () => ToastChannel.show('Hello from Flutter'),
+              onPressed: () => DemoBridgeApis.toast.show('Hello from Flutter'),
               child: const Text('① Toast 测试（HostApi）'),
             ),
             const SizedBox(height: 12),
             FilledButton(
               onPressed: () async {
-                final info = await DeviceInfoChannel.getInfo();
-                setState(() => _deviceInfo = info.toString());
+                final info = await DemoBridgeApis.deviceInfo.getInfo();
+                setState(() => _deviceInfo = _formatDeviceInfo(info));
               },
               child: const Text('② 拿设备信息（HostApi 异步返回）'),
             ),
@@ -75,17 +73,21 @@ class _HomePageState extends State<HomePage> {
             ],
             const SizedBox(height: 12),
             FilledButton(
-              onPressed: () => RouteChannel.pushNativeRoute('demo://detail',
-                  arguments: <String, Object?>{'from': 'flutter_home'}),
+              onPressed: () => DemoBridgeApis.route.pushNativeRoute(
+                'demo://detail',
+                <String?, Object?>{'from': 'flutter_home'},
+              ),
               child: const Text('③ 让原生跳一个原生页（HostApi）'),
             ),
             const SizedBox(height: 12),
             FilledButton(
-              onPressed: () => RouteChannel.pushFlutterRoute('flutter/detail',
-                  arguments: <String, Object?>{
-                    'id': 999,
-                    'title': '由 Flutter 触发的二级页',
-                  }),
+              onPressed: () => DemoBridgeApis.route.pushFlutterRoute(
+                'flutter/detail',
+                <String?, Object?>{
+                  'id': 999,
+                  'title': '由 Flutter 触发的二级页',
+                },
+              ),
               child: const Text('④ 再开一个 Flutter 容器（HostApi）'),
             ),
             const SizedBox(height: 24),
@@ -136,4 +138,8 @@ String _formatEntryArgs() {
     'buildVersion: ${args.buildVersion}',
     'packageName: ${args.packageName}',
   ].join('\n');
+}
+
+String _formatDeviceInfo(DeviceInfo info) {
+  return 'brand=${info.brand ?? ''}, model=${info.model ?? ''}, sdkInt=${info.sdkInt ?? 0}';
 }

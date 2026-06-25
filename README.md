@@ -22,5 +22,7 @@ flutter pub get
 - `lib/main.dart` 入口，处理 Dart entrypoint args 与 `nativeParams` 路由协议。
 - `lib/app/entry_args.dart` `EntryArgs` 数据模型，对齐原生侧 `FlutterArgsUtils.createEntryArgs`。
 - `lib/routing/router.dart` 路由表与 `_onGenerateRoute`。
-- `lib/channel/` 各 `MethodChannel` 封装（生产环境用 Pigeon 替换）。
+- `lib/pigeon/generated/` Pigeon 生成的强类型桥接代码。
+- `lib/pigeon/` 基于生成代码的轻量封装与事件桥接。
 - `lib/pages/` 演示页面。
+- `pigeons/demo_bridge.dart` Pigeon 协议定义。

@@ -16,6 +16,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  pigeon: ^24.2.1
 
 flutter:
   # 关键：把当前 Flutter 工程当成 Module 打包，宿主才能通过 include_flutter.groovy 引入

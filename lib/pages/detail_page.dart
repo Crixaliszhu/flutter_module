@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../channel/route_channel.dart';
+import '../pigeon/demo_bridge.dart';
 
 /// 详情页。
 ///
@@ -23,7 +23,7 @@ class DetailPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           // 直接走 Navigator.pop 也行；这里走 RouteChannel 演示「带数据返回原生」的能力。
-          onPressed: () => RouteChannel.popRoute(<String, Object?>{
+          onPressed: () => DemoBridgeApis.route.popRoute(<String?, Object?>{
             'fromDetail': true,
             'echoId': id,
           }),
