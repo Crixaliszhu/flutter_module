@@ -4,12 +4,18 @@ import 'package:flutter/material.dart';
 
 import 'app/entry_args.dart';
 import 'channel/event_channel.dart';
+import 'routing/route_stack_observer.dart';
 import 'routing/router.dart';
 
 /// Demo 全局配置，存一下原生传过来的 EntryArgs，便于业务页面读取。
 class AppConfig {
   static EntryArgs entryArgs = const EntryArgs();
 }
+
+/// 全局路由栈观察器实例。
+///
+/// 每个 Flutter 引擎只有一个 Navigator，挂一个 observer 就够了。
+final RouteStackObserver routeStackObserver = RouteStackObserver();
 
 /// Flutter Module 的 Dart 入口。
 ///
@@ -40,6 +46,9 @@ class DemoApp extends StatelessWidget {
         colorSchemeSeed: Colors.blue,
         useMaterial3: true,
       ),
+
+      // 挂载路由栈观察器，监控 Navigator pop 事件。
+      navigatorObservers: [routeStackObserver],
 
       // 路由生成器：解析 `nativeParams` 协议，并按 [routeMap] 派发到具体页面。
       onGenerateRoute: _onGenerateRoute,
@@ -84,6 +93,12 @@ class DemoApp extends StatelessWidget {
     }
 
     final newSettings = RouteSettings(name: purePath, arguments: arguments);
+
+    // 把当前容器的 instanceId 告诉 observer，用于栈空时通知原生关容器。
+    final instanceId = arguments['instanceId'] as String?;
+    if (instanceId != null) {
+      routeStackObserver.setInstanceId(instanceId);
+    }
 
     if (builder != null) {
       return MaterialPageRoute(
